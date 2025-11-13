@@ -1,8 +1,5 @@
 from library_books import library_books
 from datetime import datetime, timedelta
-import tkinter as tk
-
-#Tkinter tutorial used: https://www.geeksforgeeks.org/python/python-gui-tkinter
 
 # -------- Level 1 --------
 # TODO: Create a function to view all books that are currently available
@@ -18,19 +15,15 @@ def view_books(library_books):
 # Search should be case-insensitive
 # Return a list of matching books
 
-def search_books(library_books, search_term, search_type):
+def search_books(library_books, search_term):
     #Search terms and info are all changed to lower case to not be case-sensitive
     matches = []
     search_term = search_term.lower()
 
     #Loops through database, checks for matches
     for book in library_books:
-        if search_type == "author":
-            if book["author"].lower() == search_term:
-                matches.append(book)
-        elif search_type == "genre":
-            if book["genre"].lower() == search_term:
-                matches.append(book)
+        if book["author"].lower() == search_term or book["genre"].lower() == search_term:
+            matches.append(book)
 
     return matches
 
@@ -106,6 +99,8 @@ class Book:
     def view_details(self):
         print(self.id+"."+self.title+"."+self.author)
 
+book_list = []
+
 def create_book_objects(library_books):
     book_list = []
 
@@ -116,6 +111,9 @@ def create_book_objects(library_books):
 
     return book_list
 
+def inventory_new_book(id, title, author, genre, available, due_date, checkouts):
+    new_book = Book(id, title, author, genre, available, due_date, checkouts)
+    book_list.append(new_book)
 # -------- Optional Advanced Features --------
 # You can implement these to move into Tier 4:
 # - Add a new book (via input) to the catalog
@@ -125,10 +123,26 @@ def create_book_objects(library_books):
 # - Anything else you want to build on top of the system!
 
 if __name__ == "__main__":
-    # You can use this space to test your functions
-    window = tk.Tk()
+    while True:
+        print("You have 6 options. Please type the number of the action you would like to perform. You may,")
+        print("1) Search books")
+        print("2) Check out books")
+        print("3) Return books")
+        print("4) See overdue books")
+        print("5) Exit")
+        option = input()
 
-
-
-    while running:
-        print("")
+        match option:
+            case "1":
+                view_books(library_books)
+            case "2":
+                book_id = input("ID: ")
+                checkout_book(library_books, book_id)
+            case "3":
+                book_id = input("ID: ")
+                return_book(library_books, book_id)
+            case "4":
+                for i in return_overdue_books(library_books):
+                    print(i["title"])
+            case "5":
+                exit()
